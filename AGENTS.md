@@ -5,10 +5,11 @@ This repo is a static single-page restaurant bill splitter. The whole app lives 
 ## App Shape
 
 - `index.html` contains HTML, CSS, and JavaScript.
+- `assets/banks/` contains local bank/app logo assets used by the payment dropdown.
 - `package.json` only provides a local static server with `npm run dev`.
 - `README.md` explains usage, deployment, and current user-facing behavior.
 - Export image depends on the CDN-loaded `html2canvas` script.
-- Current app version is `v1.0.2`.
+- Current app version is `v1.0.3`.
 
 ## Core Behaviors
 
@@ -20,6 +21,7 @@ This repo is a static single-page restaurant bill splitter. The whole app lives 
 - VAT and service charge are applied per person from their item subtotal.
 - VAT is calculated on `subtotal + service`.
 - Payment details are optional and only shown when at least one payment field has a value. Bank/app selection uses a compact custom dropdown with local logo image assets and abbreviations such as `SCB` shown before the full name to reduce selection mistakes.
+- Some downloaded bank SVGs are intentionally cropped via `viewBox`/dimension edits to show icon-only marks in the dropdown: `bay.svg`, `bbl.svg`, `scb.svg`, `kbank.svg`, and `gsb.svg`.
 
 ## Receipt Output
 

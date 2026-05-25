@@ -2,7 +2,7 @@
 
 A single-page bill splitting app for restaurant meals. Add friends, menu items, VAT, service charge, and payment details, then export the result as an image, CSV, or print-ready receipt.
 
-Current version: `v1.0.2`
+Current version: `v1.0.3`
 
 ## Features
 
@@ -10,7 +10,7 @@ Current version: `v1.0.2`
 - Enter long or multi-line item names without losing readability.
 - Select who shared each item. If no one is selected, the item is split by everyone.
 - Apply VAT and service charge to each person's subtotal.
-- Choose payment destination details with a compact bank/app logo dropdown for easier selection.
+- Choose payment destination details with a compact bank/app logo dropdown for easier selection. Logos are stored locally in `assets/banks/`.
 - Export the split as a PNG image, CSV, or printout.
 
 ## Receipt Output
@@ -35,12 +35,24 @@ The itemized receipt is intended for checking the bill. The payment cards are in
 
 ```text
 .
+├── assets/
+│   └── banks/
+│       ├── bay.svg
+│       ├── bbl.svg
+│       ├── gsb.svg
+│       ├── kbank.svg
+│       ├── ktb.svg
+│       ├── promptpay.png
+│       ├── scb.svg
+│       └── ttb.svg
 ├── index.html
 ├── package.json
 ├── vercel.json
 ├── .gitignore
 └── README.md
 ```
+
+The bank assets are downloaded logo files used by the custom payment dropdown. Several SVGs are intentionally cropped to icon-only marks so the dropdown stays compact and avoids duplicate text.
 
 ## Run Locally
 
