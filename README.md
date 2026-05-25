@@ -1,6 +1,32 @@
 # Bill Splitter
 
-A single-page bill splitting app for restaurant meals. Add friends, menu items, VAT, service charge, and payment details, then export the split as an image, CSV, or print-ready receipt.
+A single-page bill splitting app for restaurant meals. Add friends, menu items, VAT, service charge, and payment details, then export the result as an image, CSV, or print-ready receipt.
+
+## Features
+
+- Add friends and menu items with quantity and price.
+- Select who shared each item. If no one is selected, the item is split by everyone.
+- Apply VAT and service charge to each person's subtotal.
+- Add payment destination details for sharing.
+- Export the split as a PNG image, CSV, or printout.
+
+## Receipt Output
+
+The output is split into two sections:
+
+- **Restaurant-style receipt**: a compact itemized bill with item name, shared-by marker, item amount, and charges breakdown. Items shared by everyone show `All` in the shared-by column.
+- **Per-person payment cards**: compact share-friendly cards with each person's name and final amount only, plus payment info below.
+
+The itemized receipt is intended for checking the bill. The payment cards are intended for screenshots and sharing in chat.
+
+## How To Use
+
+1. Enter the restaurant name and date.
+2. Add everyone in the **Friends** section.
+3. Set VAT and service charge percentages.
+4. Add payment details if you want them shown in the share output.
+5. Add each menu item, selecting the people who shared it. Leave all checkboxes empty to split that item by everyone.
+6. Use **Export as Image**, **Export CSV**, or **Print** from the receipt panel.
 
 ## Project Structure
 
@@ -15,7 +41,7 @@ A single-page bill splitting app for restaurant meals. Add friends, menu items, 
 
 ## Run Locally
 
-Open `index.html` directly in a browser, or run a simple local server:
+Open `index.html` directly in a browser, or run the included local server:
 
 ```bash
 npm run dev
@@ -39,4 +65,3 @@ This project is a static site with no build step.
    - Output Directory: `.`
 
 Vercel will serve `index.html` from the project root.
-# bill-splitter

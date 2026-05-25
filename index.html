@@ -151,6 +151,8 @@
 
   input[type="text"], input[type="number"], input[type="date"], select {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
     border: 1.5px solid var(--border);
     background: var(--paper);
     padding: 8px 10px;
@@ -160,6 +162,11 @@
     border-radius: 2px;
     outline: none;
     transition: border-color 0.15s;
+  }
+  input[type="date"] {
+    display: block;
+    -webkit-appearance: none;
+    appearance: none;
   }
   input:focus, select:focus, input[type="date"]:focus { border-color: var(--accent); }
 
@@ -281,8 +288,8 @@
   }
 
   .thermal-receipt {
-    max-width: 360px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
     padding: 18px 16px;
     background: #fffefb;
     color: #21190f;
@@ -312,49 +319,66 @@
   .receipt-header .meta { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
 
   .receipt-rule {
-    height: 1px;
     border-top: 1px dashed var(--border);
-    margin: 10px 0;
+    margin: 8px 0;
   }
 
   .thermal-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(88px, 0.9fr) minmax(72px, auto);
+    align-items: baseline;
+    gap: 8px;
     font-size: 0.76rem;
     line-height: 1.35;
-    padding: 3px 0;
+    padding: 6px 0;
+    border-bottom: 1px dotted rgba(122,106,80,0.42);
   }
   .thermal-row .amount {
-    flex: 0 0 auto;
     text-align: right;
+  }
+  .thermal-row:last-child {
+    border-bottom: 0;
+  }
+  .thermal-section {
+    border-top: 1px dashed var(--border);
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+  .thermal-items .thermal-row:last-child,
+  .thermal-section .thermal-row:last-child {
+    border-bottom: 0;
+  }
+  .thermal-table-head {
+    color: var(--muted);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 5px;
   }
   .thermal-item-name {
     overflow-wrap: anywhere;
   }
   .shared-markers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: 3px;
+    color: var(--ink);
+    font-size: 0.68rem;
+    overflow-wrap: anywhere;
   }
   .shared-marker {
-    border: 1px solid #d9c9a5;
-    border-radius: 999px;
-    padding: 1px 5px;
-    font-size: 0.58rem;
-    line-height: 1.2;
-    color: var(--muted);
-    background: var(--paper);
+    white-space: nowrap;
   }
   .thermal-breakdown {
-    margin-top: 2px;
+    margin-top: 10px;
   }
   .thermal-total {
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+    border-bottom: 0;
+  }
+  .thermal-total-section {
+    margin-top: 8px;
   }
 
   .payment-cards-section {
@@ -384,40 +408,46 @@
 
   .payment-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
   }
 
   .payment-card {
     background: #fffefb;
-    border: 1.5px solid var(--ink);
-    border-radius: 6px;
-    min-height: 112px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 2px 2px 0 rgba(26,18,8,0.16);
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    min-height: 48px;
+    padding: 8px 9px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 1px 1px 0 rgba(26,18,8,0.14);
   }
   .payment-card-name {
     font-family: 'DM Mono', monospace;
-    font-size: 0.76rem;
-    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.15;
+    color: var(--ink);
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.6px;
     overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
   }
   .payment-card-amount {
     font-family: 'DM Mono', monospace;
-    font-size: 1.55rem;
+    font-size: clamp(0.78rem, 2.5vw, 0.98rem);
     font-weight: 500;
-    line-height: 1;
+    line-height: 1.15;
     color: var(--accent);
     text-align: right;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
   }
 
   .line-item.sub { color: var(--muted); font-size: 0.75rem; }
+  .line-item.sub span:first-child { color: var(--ink); }
 
   .payment-section {
     margin-top: 14px;
@@ -474,7 +504,7 @@
   .grand-total-bar strong { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
 
   .inline-row { display: flex; gap: 8px; align-items: flex-end; }
-  .inline-row > * { flex: 1; }
+  .inline-row > * { flex: 1; min-width: 0; }
   .inline-row > .btn { flex: 0 0 auto; margin-bottom: 0; }
 
   .checkbox-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
@@ -543,10 +573,22 @@
 
   @media (max-width: 700px) {
     #receipt-export { padding: 16px 12px; }
+    .panel { padding: 16px; }
+    input[type="date"] { min-height: 37px; }
+    .thermal-receipt { padding: 16px 12px; }
+    .thermal-row {
+      grid-template-columns: minmax(0, 1.15fr) minmax(74px, 0.8fr) minmax(62px, auto);
+      gap: 6px;
+      font-size: 0.7rem;
+    }
+    .shared-markers { font-size: 0.62rem; }
     .payment-cards-section { padding: 14px; }
     .payment-cards-header { align-items: flex-start; flex-direction: column; }
     .payment-cards-header .meta { text-align: left; }
-    .payment-card-grid { grid-template-columns: 1fr; }
+    .payment-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .payment-card { min-height: 46px; padding: 7px 8px; }
+    .payment-card-name { font-size: 0.62rem; }
+    .payment-card-amount { font-size: clamp(0.72rem, 3.2vw, 0.88rem); }
   }
 
   @media print { .actions-bar { display: none; } }
@@ -882,35 +924,34 @@ function updateReceipt() {
 
   const thermalItems = items.map(item => {
     const share = item.sharedBy.length > 0 ? item.sharedBy : friends;
-    const markers = share.map(name => `<span class="shared-marker">${esc(name)}</span>`).join('');
+    const sharedByAll = friends.length > 0 && share.length === friends.length && friends.every(f => share.includes(f));
+    const markers = sharedByAll
+      ? '<span class="shared-marker">All</span>'
+      : share.map(name => `<span class="shared-marker">${esc(name)}</span>`).join(', ');
     return `<div class="thermal-row">
-      <div>
-        <div class="thermal-item-name">${esc(item.name)}${item.qty > 1 ? ` x${item.qty}` : ''}</div>
-        <div class="shared-markers">${markers}</div>
-      </div>
+      <div class="thermal-item-name">${esc(item.name)}${item.qty > 1 ? ` x${item.qty}` : ''}</div>
+      <div class="shared-markers">${markers}</div>
       <div class="amount">${fmt(item.price * item.qty)}</div>
     </div>`;
   }).join('');
 
-  const perPersonSummary = personTotals.map(person =>
-    `<div class="thermal-row line-item sub">
-      <span>${esc(person.name)}</span>
-      <span class="amount">${fmt(person.total)}</span>
-    </div>`
-  ).join('');
-
   thermalEl.innerHTML = `
-    ${thermalItems}
-    <div class="receipt-rule"></div>
-    <div class="thermal-breakdown">
-      <div class="thermal-row"><span>Items subtotal</span><span class="amount">${fmt(itemsSubtotal)}</span></div>
-      ${svcPct > 0 ? `<div class="thermal-row"><span>Service ${svcPct}%</span><span class="amount">${fmt(serviceTotal)}</span></div>` : ''}
-      ${vatPct > 0 ? `<div class="thermal-row"><span>VAT ${vatPct}%</span><span class="amount">${fmt(vatTotal)}</span></div>` : ''}
-      <div class="receipt-rule"></div>
-      <div class="thermal-row thermal-total"><span>Total</span><span class="amount">${fmt(grandTotal)}</span></div>
+    <div class="thermal-row thermal-table-head">
+      <span>Item</span>
+      <span>Shared by</span>
+      <span class="amount">Amount</span>
     </div>
-    <div class="receipt-rule"></div>
-    ${perPersonSummary}
+    <div class="thermal-items">
+      ${thermalItems}
+    </div>
+    <div class="thermal-breakdown thermal-section">
+      <div class="thermal-row"><span>Items subtotal</span><span></span><span class="amount">${fmt(itemsSubtotal)}</span></div>
+      ${svcPct > 0 ? `<div class="thermal-row"><span>Service ${svcPct}%</span><span></span><span class="amount">${fmt(serviceTotal)}</span></div>` : ''}
+      ${vatPct > 0 ? `<div class="thermal-row"><span>VAT ${vatPct}%</span><span></span><span class="amount">${fmt(vatTotal)}</span></div>` : ''}
+    </div>
+    <div class="thermal-total-section thermal-section">
+      <div class="thermal-row thermal-total"><span>Total</span><span></span><span class="amount">${fmt(grandTotal)}</span></div>
+    </div>
   `;
 
   cardsEl.innerHTML = `
