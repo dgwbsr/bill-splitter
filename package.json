@@ -1,0 +1,18 @@
+{
+  "name": "bill-splitter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A static restaurant bill splitter app.",
+  "scripts": {
+    "dev": "python3 -m http.server 3000",
+    "start": "python3 -m http.server 3000"
+  },
+  "keywords": [
+    "bill-splitter",
+    "restaurant",
+    "static-site",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT"
+}
