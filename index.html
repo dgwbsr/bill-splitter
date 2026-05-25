@@ -37,6 +37,15 @@
 
   h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
+  input,
+  .amount,
+  .thermal-total,
+  .payment-card-amount,
+  .grand-total-bar strong {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+
   .app-header {
     text-align: center;
     padding: 32px 20px 16px;
@@ -250,75 +259,172 @@
   }
 
   #receipt-export {
-    padding: 28px 32px;
+    padding: 24px;
     font-family: 'DM Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .output-section {
+    background: var(--receipt);
+    border: 1px solid var(--border);
+  }
+
+  .section-kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .thermal-receipt {
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 18px 16px;
+    background: #fffefb;
+    color: #21190f;
+    border: 1px solid #e3d8bf;
+    box-shadow: 0 2px 0 rgba(26,18,8,0.08);
   }
 
   .receipt-header {
     text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px dashed var(--border);
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px dashed var(--border);
   }
-  .receipt-header h2 { font-size: 1.5rem; }
+  .receipt-header h2 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
   .receipt-header .restaurant-name {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-family: 'Playfair Display', serif;
     color: var(--accent);
+    line-height: 1.1;
   }
   .receipt-header .meta { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
 
-  .person-receipt {
-    margin-bottom: 16px;
-    padding: 14px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    background: var(--paper);
+  .receipt-rule {
+    height: 1px;
+    border-top: 1px dashed var(--border);
+    margin: 10px 0;
   }
-  .person-receipt-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    border-bottom: 1px dashed var(--border);
-    padding-bottom: 6px;
-    margin-bottom: 8px;
+
+  .thermal-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    gap: 12px;
+    font-size: 0.76rem;
+    line-height: 1.35;
+    padding: 3px 0;
   }
-  .person-receipt-name .total-label {
+  .thermal-row .amount {
+    flex: 0 0 auto;
+    text-align: right;
+  }
+  .thermal-item-name {
+    overflow-wrap: anywhere;
+  }
+  .shared-markers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 3px;
+  }
+  .shared-marker {
+    border: 1px solid #d9c9a5;
+    border-radius: 999px;
+    padding: 1px 5px;
+    font-size: 0.58rem;
+    line-height: 1.2;
+    color: var(--muted);
+    background: var(--paper);
+  }
+  .thermal-breakdown {
+    margin-top: 2px;
+  }
+  .thermal-total {
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .payment-cards-section {
+    padding: 18px;
+    background: linear-gradient(180deg, #fffef9 0%, #f7f0dc 100%);
+  }
+
+  .payment-cards-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-end;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1.5px dashed var(--border);
+  }
+  .payment-cards-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    line-height: 1.05;
+  }
+  .payment-cards-header .meta {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .payment-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .payment-card {
+    background: #fffefb;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    min-height: 112px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 2px 2px 0 rgba(26,18,8,0.16);
+  }
+  .payment-card-name {
     font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
+    font-size: 0.76rem;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 1px;
+    overflow-wrap: anywhere;
   }
-  .person-receipt-name .total-amount {
-    font-size: 1.2rem;
+  .payment-card-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.55rem;
+    font-weight: 500;
+    line-height: 1;
     color: var(--accent);
+    text-align: right;
+    overflow-wrap: anywhere;
   }
 
-  .line-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    padding: 2px 0;
-    color: var(--ink);
-  }
   .line-item.sub { color: var(--muted); font-size: 0.75rem; }
-  .line-item.total-line {
-    border-top: 1px solid var(--border);
-    margin-top: 6px;
-    padding-top: 6px;
-    font-weight: 500;
-    color: var(--ink);
-  }
 
   .payment-section {
-    margin-top: 20px;
-    padding-top: 14px;
-    border-top: 2px dashed var(--border);
-    text-align: center;
+    margin-top: 14px;
+    padding: 12px;
+    border: 1px dashed var(--border);
+    text-align: left;
+    background: rgba(255,254,249,0.72);
   }
   .payment-section h3 {
     font-size: 0.75rem;
@@ -329,14 +435,15 @@
     margin-bottom: 8px;
   }
   .payment-detail {
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     color: var(--ink);
-    margin: 4px 0;
+    margin: 3px 0;
+    overflow-wrap: anywhere;
   }
 
   .receipt-footer {
     text-align: center;
-    margin-top: 16px;
+    margin-top: 12px;
     font-size: 0.7rem;
     color: var(--muted);
     letter-spacing: 1px;
@@ -433,6 +540,14 @@
   }
 
   .tag { display: inline-block; background: var(--paper2); border: 1px solid var(--border); padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-family: 'DM Mono', monospace; color: var(--muted); }
+
+  @media (max-width: 700px) {
+    #receipt-export { padding: 16px 12px; }
+    .payment-cards-section { padding: 14px; }
+    .payment-cards-header { align-items: flex-start; flex-direction: column; }
+    .payment-cards-header .meta { text-align: left; }
+    .payment-card-grid { grid-template-columns: 1fr; }
+  }
 
   @media print { .actions-bar { display: none; } }
 </style>
@@ -556,21 +671,35 @@
   <div class="col-right">
     <div class="receipt-panel">
       <div id="receipt-export">
-      <div class="receipt-header">
-        <div class="restaurant-name" id="r-restaurant">Restaurant</div>
-        <div class="meta" id="r-date"></div>
-        <h2 style="margin-top:6px;">Bill Summary</h2>
-      </div>
-      <div id="r-people-list"><div class="empty-state">Add friends and items to see the split</div></div>
-      <div id="r-payment" style="display:none;">
-        <div class="payment-section">
-          <h3>Payment To</h3>
-          <div class="payment-detail" id="r-pay-bank"></div>
-          <div class="payment-detail" id="r-pay-account"></div>
-          <div class="payment-detail" id="r-pay-name"></div>
-        </div>
-      </div>
-      <div class="receipt-footer">Thank you for dining together</div>
+        <section class="thermal-receipt" aria-label="Restaurant-style receipt">
+          <div class="section-kicker">Restaurant-style receipt</div>
+          <div class="receipt-header">
+            <div class="restaurant-name" id="r-restaurant">Restaurant</div>
+            <div class="meta" id="r-date"></div>
+            <h2>Itemized bill</h2>
+          </div>
+          <div id="r-thermal-list"><div class="empty-state">Add friends and items to see the split</div></div>
+          <div class="receipt-footer">Thank you for dining together</div>
+        </section>
+
+        <section class="payment-cards-section output-section" aria-label="Per-person payment cards">
+          <div class="payment-cards-header">
+            <div>
+              <div class="section-kicker">Per-person payment cards</div>
+              <h2>Payment Split</h2>
+            </div>
+            <div class="meta" id="r-card-meta">Ready to share</div>
+          </div>
+          <div id="r-payment-cards"><div class="empty-state">Add friends and items to see payment cards</div></div>
+          <div id="r-payment" style="display:none;">
+            <div class="payment-section">
+              <h3>Payment To</h3>
+              <div class="payment-detail" id="r-pay-bank"></div>
+              <div class="payment-detail" id="r-pay-account"></div>
+              <div class="payment-detail" id="r-pay-name"></div>
+            </div>
+          </div>
+        </section>
     </div>
 
     <div class="actions-bar">
@@ -674,6 +803,14 @@ function renderItems() {
 
 // ---- Receipt ----
 function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function esc(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 function updateReceipt() {
   const vatPct = parseFloat(document.getElementById('vat').value) || 0;
@@ -691,23 +828,26 @@ function updateReceipt() {
 
   document.getElementById('r-restaurant').textContent = restaurant;
   document.getElementById('r-date').textContent = date;
+  document.getElementById('r-card-meta').textContent = [restaurant, date].filter(Boolean).join(' · ') || 'Ready to share';
 
   // Payment
   const hasPayment = bank || account || payName;
   const payEl = document.getElementById('r-payment');
   if (hasPayment) {
     payEl.style.display = 'block';
-    document.getElementById('r-pay-bank').textContent = bank ? `💳 ${bank}` : '';
+    document.getElementById('r-pay-bank').textContent = bank ? `Bank/App: ${bank}` : '';
     document.getElementById('r-pay-account').textContent = account ? `# ${account}` : '';
-    document.getElementById('r-pay-name').textContent = payName ? `👤 ${payName}` : '';
+    document.getElementById('r-pay-name').textContent = payName ? `Name: ${payName}` : '';
   } else {
     payEl.style.display = 'none';
   }
 
-  const el = document.getElementById('r-people-list');
+  const thermalEl = document.getElementById('r-thermal-list');
+  const cardsEl = document.getElementById('r-payment-cards');
 
   if (friends.length === 0 || items.length === 0) {
-    el.innerHTML = '<div class="empty-state">Add friends and items to see the split</div>';
+    thermalEl.innerHTML = '<div class="empty-state">Add friends and items to see the split</div>';
+    cardsEl.innerHTML = '<div class="empty-state">Add friends and items to see payment cards</div>';
     return;
   }
 
@@ -726,41 +866,62 @@ function updateReceipt() {
     });
   });
 
+  const itemsSubtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const serviceTotal = itemsSubtotal * svcPct / 100;
+  const vatTotal = (itemsSubtotal + serviceTotal) * vatPct / 100;
   let grandTotal = 0;
-  const html = friends.map(f => {
+  const personTotals = friends.map(f => {
     const data = subtotals[f];
     const sub = data.subtotal;
     const svc = sub * svcPct / 100;
     const vat = (sub + svc) * vatPct / 100;
     const total = sub + svc + vat;
     grandTotal += total;
+    return { name: f, subtotal: sub, service: svc, vat, total };
+  });
 
-    const itemLines = data.items.map(i =>
-      `<div class="line-item">
-        <span>${i.name}${i.sharedWith > 1 ? ` <span class="tag">÷${i.sharedWith}</span>` : ''}</span>
-        <span>${fmt(i.perPerson)}</span>
-      </div>`
-    ).join('');
-
-    return `<div class="person-receipt">
-      <div class="person-receipt-name">
-        <span>${f}</span>
-        <span><span class="total-label">Total </span><span class="total-amount">${fmt(total)}</span></span>
+  const thermalItems = items.map(item => {
+    const share = item.sharedBy.length > 0 ? item.sharedBy : friends;
+    const markers = share.map(name => `<span class="shared-marker">${esc(name)}</span>`).join('');
+    return `<div class="thermal-row">
+      <div>
+        <div class="thermal-item-name">${esc(item.name)}${item.qty > 1 ? ` x${item.qty}` : ''}</div>
+        <div class="shared-markers">${markers}</div>
       </div>
-      ${itemLines}
-      <div class="line-item sub"><span>Subtotal</span><span>${fmt(sub)}</span></div>
-      ${svcPct > 0 ? `<div class="line-item sub"><span>Service (${svcPct}%)</span><span>${fmt(svc)}</span></div>` : ''}
-      ${vatPct > 0 ? `<div class="line-item sub"><span>VAT (${vatPct}%) on ${fmt(sub + svc)}</span><span>${fmt(vat)}</span></div>` : ''}
-      <div class="line-item total-line"><span>Pay</span><span><strong>${fmt(total)}</strong></span></div>
+      <div class="amount">${fmt(item.price * item.qty)}</div>
     </div>`;
   }).join('');
 
-  el.innerHTML = `
-    <div class="grand-total-bar">
-      <span>Grand Total (${friends.length} people)</span>
-      <strong>${fmt(grandTotal)}</strong>
+  const perPersonSummary = personTotals.map(person =>
+    `<div class="thermal-row line-item sub">
+      <span>${esc(person.name)}</span>
+      <span class="amount">${fmt(person.total)}</span>
+    </div>`
+  ).join('');
+
+  thermalEl.innerHTML = `
+    ${thermalItems}
+    <div class="receipt-rule"></div>
+    <div class="thermal-breakdown">
+      <div class="thermal-row"><span>Items subtotal</span><span class="amount">${fmt(itemsSubtotal)}</span></div>
+      ${svcPct > 0 ? `<div class="thermal-row"><span>Service ${svcPct}%</span><span class="amount">${fmt(serviceTotal)}</span></div>` : ''}
+      ${vatPct > 0 ? `<div class="thermal-row"><span>VAT ${vatPct}%</span><span class="amount">${fmt(vatTotal)}</span></div>` : ''}
+      <div class="receipt-rule"></div>
+      <div class="thermal-row thermal-total"><span>Total</span><span class="amount">${fmt(grandTotal)}</span></div>
     </div>
-    ${html}
+    <div class="receipt-rule"></div>
+    ${perPersonSummary}
+  `;
+
+  cardsEl.innerHTML = `
+    <div class="payment-card-grid">
+      ${personTotals.map(person => `
+        <article class="payment-card">
+          <div class="payment-card-name">${esc(person.name)}</div>
+          <div class="payment-card-amount">${fmt(person.total)}</div>
+        </article>
+      `).join('')}
+    </div>
   `;
 }
 
