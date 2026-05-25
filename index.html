@@ -76,11 +76,12 @@
   }
 
   .container {
-    max-width: 1380px;
+    width: 100%;
+    max-width: none;
     margin: 0 auto;
     padding: 24px 24px 60px;
     display: grid;
-    grid-template-columns: 260px 1fr 1fr;
+    grid-template-columns: 260px minmax(520px, 1.25fr) minmax(520px, 1fr);
     grid-template-rows: auto;
     gap: 20px;
     align-items: start;
@@ -222,14 +223,15 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 10px;
+    padding: 4px 6px 4px 10px;
     border: 1.5px solid var(--border);
     border-radius: 20px;
     font-family: 'DM Mono', monospace;
     font-size: 0.78rem;
     background: var(--paper2);
-    cursor: pointer;
     transition: all 0.15s;
+    min-width: 0;
+    max-width: 100%;
   }
   .friend-tag.active {
     background: var(--ink);
@@ -237,9 +239,28 @@
     border-color: var(--ink);
   }
   .friend-tag .remove { color: var(--accent); font-size: 1rem; line-height: 1; }
+  .friend-tag input.friend-name-input {
+    width: auto;
+    min-width: 54px;
+    max-width: 150px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+  }
+  .friend-tag input.friend-name-input:focus {
+    outline: none;
+    border: 0;
+  }
 
   /* Items table */
-  .items-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.82rem; }
+  .items-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.82rem; table-layout: fixed; }
+  .items-table .col-item { width: 58%; }
+  .items-table .col-qty { width: 120px; }
+  .items-table .col-price { width: 120px; }
+  .items-table .col-actions { width: 58px; }
   .items-table th {
     font-family: 'DM Mono', monospace;
     font-size: 0.68rem;
@@ -254,6 +275,101 @@
   .items-table td:last-child { text-align: right; }
 
   .item-shared { font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .item-edit-name {
+    margin-bottom: 6px;
+  }
+  .items-table input.item-edit-name,
+  .items-table input.item-edit-number {
+    padding: 5px 6px;
+    font-size: 0.78rem;
+  }
+  .items-table input.item-edit-number {
+    text-align: right;
+  }
+  .items-table input.item-edit-name {
+    width: 100%;
+  }
+  .items-table .item-price-input {
+    min-width: 82px;
+  }
+  .items-table .add-item-row td {
+    background: rgba(245,234,208,0.45);
+  }
+  .items-table .add-item-action-row td {
+    padding-top: 0;
+    background: rgba(245,234,208,0.45);
+  }
+  .items-table .add-item-action-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .add-item-hint {
+    font-size: 0.66rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .qty-stepper {
+    display: grid;
+    grid-template-columns: 28px 5.4ch 28px;
+    align-items: stretch;
+    gap: 3px;
+    width: max-content;
+    max-width: 100%;
+  }
+  .qty-stepper .stepper-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 30px;
+    border: 1.5px solid var(--border);
+    background: var(--paper2);
+    color: var(--ink);
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.12s, color 0.12s, background 0.12s;
+  }
+  .qty-stepper .stepper-btn:hover {
+    border-color: var(--ink);
+    background: var(--paper);
+  }
+  .qty-stepper .stepper-btn:active {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .qty-stepper input.item-edit-number {
+    min-width: 0;
+    width: 5.4ch;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .qty-stepper input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  .qty-stepper input[type="number"]::-webkit-outer-spin-button,
+  .qty-stepper input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .item-shared-edit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .item-shared-edit .cb-item label {
+    padding: 3px 7px;
+    font-size: 0.68rem;
+  }
+  .item-shared-edit .cb-item label .cb-box {
+    width: 11px;
+    height: 11px;
+    font-size: 8px;
+  }
 
   /* Summary / Receipt panel */
   .receipt-panel {
@@ -637,12 +753,12 @@
     <div class="panel">
       <div class="panel-title">Charges</div>
       <div class="row">
-        <label>VAT (%)</label>
-        <input type="number" id="vat" value="7" min="0" max="100" step="0.5" oninput="updateReceipt()">
-      </div>
-      <div class="row">
         <label>Service Charge (%)</label>
         <input type="number" id="service" value="10" min="0" max="100" step="0.5" oninput="updateReceipt()">
+      </div>
+      <div class="row">
+        <label>VAT (%)</label>
+        <input type="number" id="vat" value="7" min="0" max="100" step="0.5" oninput="updateReceipt()">
       </div>
     </div>
 
@@ -670,30 +786,13 @@
     <div class="panel">
       <div class="panel-title">Menu Items</div>
 
-      <div class="row">
-        <label>Item Name</label>
-        <input type="text" id="item-name" placeholder="e.g. Pad Thai">
-      </div>
-      <div class="row">
-        <label>Price</label>
-        <input type="number" id="item-price" placeholder="0.00" min="0" step="0.01">
-      </div>
-      <div class="row">
-        <label>Qty</label>
-        <input type="number" id="item-qty" value="1" min="1">
-      </div>
-
-      <div class="row">
-        <label>Shared By <span style="color:var(--accent);font-size:0.7rem;">(none selected = split all)</span></label>
-        <div class="checkbox-row" id="item-friends-check"></div>
-      </div>
-
-      <div style="margin-top:4px; margin-bottom:16px;">
-        <button class="btn btn-primary" onclick="addItem()" style="width:100%; justify-content:center;">+ Add Item</button>
-      </div>
-
-      <div class="panel-title">Items Added</div>
       <table class="items-table">
+        <colgroup>
+          <col class="col-item">
+          <col class="col-qty">
+          <col class="col-price">
+          <col class="col-actions">
+        </colgroup>
         <thead>
           <tr>
             <th>Item</th>
@@ -766,6 +865,7 @@ function addFriend() {
   friends.push(name);
   input.value = '';
   renderFriends();
+  renderItems();
   renderItemFriendsCheck();
   updateReceipt();
 }
@@ -774,6 +874,25 @@ function removeFriend(name) {
   friends = friends.filter(f => f !== name);
   items.forEach(item => { item.sharedBy = item.sharedBy.filter(f => f !== name); });
   renderFriends();
+  renderItems();
+  renderItemFriendsCheck();
+  updateReceipt();
+}
+
+function renameFriend(index, value) {
+  const oldName = friends[index];
+  const newName = value.trim();
+  if (!oldName || !newName || (newName !== oldName && friends.includes(newName))) {
+    renderFriends();
+    return;
+  }
+
+  friends[index] = newName;
+  items.forEach(item => {
+    item.sharedBy = item.sharedBy.map(name => name === oldName ? newName : name);
+  });
+  renderFriends();
+  renderItems();
   renderItemFriendsCheck();
   updateReceipt();
 }
@@ -781,13 +900,22 @@ function removeFriend(name) {
 function renderFriends() {
   const el = document.getElementById('friends-list');
   if (friends.length === 0) { el.innerHTML = '<span style="font-family:DM Mono,monospace;font-size:0.78rem;color:var(--muted)">No friends added yet</span>'; return; }
-  el.innerHTML = friends.map(f =>
-    `<span class="friend-tag">${f}<span class="remove" onclick="removeFriend('${f}')">×</span></span>`
+  el.innerHTML = friends.map((f, index) =>
+    `<span class="friend-tag">
+      <input class="friend-name-input" type="text" value="${esc(f)}" aria-label="Edit ${esc(f)}" onchange="renameFriend(${index}, this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+      <button class="btn btn-danger remove" onclick="removeFriendByIndex(${index})" aria-label="Remove ${esc(f)}">×</button>
+    </span>`
   ).join('');
+}
+
+function removeFriendByIndex(index) {
+  const friend = friends[index];
+  if (friend) removeFriend(friend);
 }
 
 function renderItemFriendsCheck() {
   const el = document.getElementById('item-friends-check');
+  if (!el) return;
   if (friends.length === 0) {
     el.innerHTML = '<span style="font-family:DM Mono,monospace;font-size:0.75rem;color:var(--muted)">Add friends first</span>';
     return;
@@ -795,8 +923,8 @@ function renderItemFriendsCheck() {
   el.innerHTML = friends.map((f, i) => {
     const id = 'cb_friend_' + i;
     return `<span class="cb-item">
-      <input type="checkbox" id="${id}" value="${f}">
-      <label for="${id}"><span class="cb-box">✓</span>${f}</label>
+      <input type="checkbox" id="${id}" value="${esc(f)}">
+      <label for="${id}"><span class="cb-box">✓</span>${esc(f)}</label>
     </span>`;
   }).join('');
 }
@@ -805,7 +933,7 @@ function renderItemFriendsCheck() {
 function addItem() {
   const name = document.getElementById('item-name').value.trim();
   const price = parseFloat(document.getElementById('item-price').value);
-  const qty = parseInt(document.getElementById('item-qty').value) || 1;
+  const qty = Math.min(999, Math.max(1, parseInt(document.getElementById('item-qty').value) || 1));
   if (!name || isNaN(price) || price <= 0) return;
 
   const checked = [...document.querySelectorAll('#item-friends-check input[type="checkbox"]:checked')].map(cb => cb.value);
@@ -815,10 +943,17 @@ function addItem() {
   document.getElementById('item-name').value = '';
   document.getElementById('item-price').value = '';
   document.getElementById('item-qty').value = '1';
-  document.querySelectorAll('#item-friends-check input[type="checkbox"]').forEach(cb => cb.checked = false);
 
   renderItems();
+  renderItemFriendsCheck();
   updateReceipt();
+}
+
+function stepNewItemQty(delta) {
+  const input = document.getElementById('item-qty');
+  if (!input) return;
+  const qty = parseInt(input.value) || 1;
+  input.value = Math.min(999, Math.max(1, qty + delta));
 }
 
 function removeItem(id) {
@@ -827,20 +962,117 @@ function removeItem(id) {
   updateReceipt();
 }
 
+function updateItemField(id, field, value) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+
+  if (field === 'name') {
+    const name = value.trim();
+    if (!name) {
+      renderItems();
+      return;
+    }
+    item.name = name;
+  }
+  if (field === 'price') {
+    const price = parseFloat(value);
+    if (isNaN(price) || price <= 0) {
+      renderItems();
+      return;
+    }
+    item.price = price;
+  }
+  if (field === 'qty') {
+    const qty = parseInt(value) || 1;
+    item.qty = Math.min(999, Math.max(1, qty));
+  }
+
+  renderItems();
+  updateReceipt();
+}
+
+function stepItemQty(id, delta) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+
+  item.qty = Math.min(999, Math.max(1, item.qty + delta));
+  renderItems();
+  updateReceipt();
+}
+
+function updateItemShared(id, friendIndex, checked) {
+  const item = items.find(i => i.id === id);
+  const friend = friends[friendIndex];
+  if (!friend) return;
+  if (!item) return;
+
+  const allFriendsSelected = item.sharedBy.length === 0 || (item.sharedBy.length === friends.length && friends.every(f => item.sharedBy.includes(f)));
+  let nextShared = allFriendsSelected ? [...friends] : [...item.sharedBy];
+
+  if (checked) {
+    if (!nextShared.includes(friend)) nextShared.push(friend);
+  } else {
+    nextShared = nextShared.filter(name => name !== friend);
+  }
+
+  item.sharedBy = nextShared;
+  renderItems();
+  updateReceipt();
+}
+
 function renderItems() {
   const tbody = document.getElementById('items-body');
-  if (items.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No items yet</td></tr>'; return; }
-  tbody.innerHTML = items.map(item =>
-    `<tr>
+  const addRows = `<tr class="add-item-row">
       <td>
-        <div>${item.name}</div>
-        <div class="item-shared">Shared: ${item.sharedBy.length > 0 ? item.sharedBy.join(', ') : 'everyone'}</div>
+        <input class="item-edit-name" type="text" id="item-name" placeholder="Item name" onkeydown="if(event.key==='Enter')addItem()">
+        <div class="add-item-hint">Shared by (none selected = split all)</div>
+        <div class="item-shared-edit" id="item-friends-check"></div>
       </td>
-      <td>${item.qty}</td>
-      <td style="text-align:right;">${fmt(item.price * item.qty)}</td>
+      <td>
+        <div class="qty-stepper">
+          <button class="stepper-btn" type="button" onclick="stepNewItemQty(-1)" aria-label="Decrease new item quantity">-</button>
+          <input class="item-edit-number" type="number" id="item-qty" value="1" min="1" max="999" aria-label="New item quantity">
+          <button class="stepper-btn" type="button" onclick="stepNewItemQty(1)" aria-label="Increase new item quantity">+</button>
+        </div>
+      </td>
+      <td style="text-align:right;"><input class="item-edit-number item-price-input" type="number" id="item-price" placeholder="0.00" min="0" step="0.01" aria-label="New item price" onkeydown="if(event.key==='Enter')addItem()"></td>
+      <td></td>
+    </tr>
+    <tr class="add-item-action-row">
+      <td colspan="4"><button class="btn btn-primary" onclick="addItem()">+ Add Item</button></td>
+    </tr>`;
+  const itemRows = items.length === 0 ? '<tr><td colspan="4" class="empty-state">No items yet</td></tr>' : items.map(item => {
+    const sharedByAll = friends.length > 0 && (item.sharedBy.length === 0 || (item.sharedBy.length === friends.length && friends.every(f => item.sharedBy.includes(f))));
+    const sharedLabel = sharedByAll ? 'All' : (item.sharedBy.length > 0 ? item.sharedBy.join(', ') : 'everyone');
+    const sharedControls = friends.length === 0
+      ? '<span class="item-shared">Add friends first</span>'
+      : friends.map((friend, index) => {
+        const id = `item_${item.id}_friend_${index}`;
+        const checked = (item.sharedBy.length === 0 || item.sharedBy.includes(friend)) ? 'checked' : '';
+        return `<span class="cb-item">
+          <input type="checkbox" id="${id}" value="${esc(friend)}" ${checked} onchange="updateItemShared(${item.id}, ${index}, this.checked)">
+          <label for="${id}"><span class="cb-box">✓</span>${esc(friend)}</label>
+        </span>`;
+      }).join('');
+    return `<tr>
+      <td>
+        <input class="item-edit-name" type="text" value="${esc(item.name)}" aria-label="Edit ${esc(item.name)} name" onchange="updateItemField(${item.id}, 'name', this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+        <div class="item-shared">Shared: ${esc(sharedLabel)}</div>
+        <div class="item-shared-edit">${sharedControls}</div>
+      </td>
+      <td>
+        <div class="qty-stepper">
+          <button class="stepper-btn" type="button" onclick="stepItemQty(${item.id}, -1)" aria-label="Decrease ${esc(item.name)} quantity">-</button>
+          <input class="item-edit-number" type="number" min="1" max="999" value="${item.qty}" aria-label="Edit ${esc(item.name)} quantity" onchange="updateItemField(${item.id}, 'qty', this.value)">
+          <button class="stepper-btn" type="button" onclick="stepItemQty(${item.id}, 1)" aria-label="Increase ${esc(item.name)} quantity">+</button>
+        </div>
+      </td>
+      <td style="text-align:right;"><input class="item-edit-number item-price-input" type="number" min="0" step="0.01" value="${item.price}" aria-label="Edit ${esc(item.name)} price" onchange="updateItemField(${item.id}, 'price', this.value)"></td>
       <td style="text-align:right;"><button class="btn btn-danger" onclick="removeItem(${item.id})">×</button></td>
-    </tr>`
-  ).join('');
+    </tr>`;
+  }).join('');
+  tbody.innerHTML = itemRows + addRows;
+  renderItemFriendsCheck();
 }
 
 // ---- Receipt ----
@@ -1025,7 +1257,7 @@ function exportCSV() {
 const today = new Date().toISOString().split('T')[0];
 document.getElementById('bill-date').value = today;
 renderFriends();
-renderItemFriendsCheck();
+renderItems();
 updateReceipt();
 </script>
 </body>
