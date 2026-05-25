@@ -274,26 +274,55 @@
   .items-table td { padding: 6px 6px; border-bottom: 1px dashed var(--border); vertical-align: top; }
   .items-table td:last-child { text-align: right; }
 
-  .item-shared { font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .item-shared { font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace; text-align: left; }
   .item-edit-name {
     margin-bottom: 6px;
   }
-  .items-table input.item-edit-name,
+  .items-table textarea.item-edit-name,
   .items-table input.item-edit-number {
     padding: 5px 6px;
     font-size: 0.78rem;
   }
+  .items-table textarea.item-edit-name {
+    width: 100%;
+    resize: vertical;
+    font-family: inherit;
+    border: 1.5px solid var(--border);
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 2px;
+    outline: none;
+    min-height: 44px;
+    display: block;
+  }
+  .items-table textarea.item-edit-name:focus {
+    border-color: var(--accent);
+  }
   .items-table input.item-edit-number {
     text-align: right;
-  }
-  .items-table input.item-edit-name {
-    width: 100%;
   }
   .items-table .item-price-input {
     min-width: 82px;
   }
-  .items-table .add-item-row td {
+  .items-table tr.item-row-inputs td {
+    border-bottom: none;
+    padding-bottom: 2px;
+  }
+  .items-table tr.item-row-shared td {
+    border-bottom: 1px dashed var(--border);
+    padding-top: 2px;
+    padding-bottom: 12px;
+  }
+  .items-table tr.add-item-row td {
     background: rgba(245,234,208,0.45);
+    border-bottom: none;
+    padding-bottom: 2px;
+  }
+  .items-table tr.add-item-shared-row td {
+    background: rgba(245,234,208,0.45);
+    border-bottom: none;
+    padding-top: 2px;
+    padding-bottom: 12px;
   }
   .items-table .add-item-action-row td {
     padding-top: 0;
@@ -347,12 +376,34 @@
     padding-left: 4px;
     padding-right: 4px;
   }
-  .qty-stepper input[type="number"] {
+  .btn-trash {
+    background: var(--paper2);
+    color: var(--accent);
+    border: 1.5px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-trash:hover {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+  }
+  .btn-trash svg {
+    display: block;
+    width: 13px;
+    height: 14px;
+  }
+  input[type="number"] {
     appearance: textfield;
     -moz-appearance: textfield;
   }
-  .qty-stepper input[type="number"]::-webkit-outer-spin-button,
-  .qty-stepper input[type="number"]::-webkit-inner-spin-button {
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
@@ -474,6 +525,7 @@
   }
   .thermal-item-name {
     overflow-wrap: anywhere;
+    white-space: pre-line;
   }
   .shared-markers {
     color: var(--ink);
@@ -687,6 +739,102 @@
 
   .tag { display: inline-block; background: var(--paper2); border: 1px solid var(--border); padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-family: 'DM Mono', monospace; color: var(--muted); }
 
+  .bank-select {
+    position: relative;
+  }
+  .bank-select-button,
+  .bank-option {
+    width: 100%;
+    min-width: 0;
+    border: 1.5px solid var(--border);
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 2px;
+    padding: 7px 8px;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) 14px;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+  }
+  .bank-select-button {
+    min-height: 42px;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .bank-select-button:hover,
+  .bank-select-button[aria-expanded="true"] {
+    border-color: var(--ink);
+    background: #fffefb;
+  }
+  .bank-caret {
+    color: var(--muted);
+    font-size: 0.72rem;
+    text-align: right;
+  }
+  .bank-menu {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    display: none;
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 4px;
+    border: 1.5px solid var(--border);
+    background: #fffefb;
+    box-shadow: 3px 3px 0 rgba(180,160,120,0.24);
+  }
+  .bank-select.open .bank-menu {
+    display: block;
+  }
+  .bank-option {
+    grid-template-columns: 38px minmax(0, 1fr);
+    border-color: transparent;
+    background: transparent;
+    padding: 6px;
+  }
+  .bank-option:hover,
+  .bank-option.active {
+    background: var(--paper2);
+    border-color: var(--border);
+  }
+  .bank-logo-img {
+    width: 36px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 2px;
+    background: white;
+  }
+  .bank-logo-fallback {
+    min-width: 0;
+    min-height: 24px;
+    border-radius: 3px;
+    background: var(--muted);
+    color: var(--paper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.58rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .bank-name {
+    min-width: 0;
+    font-size: 0.66rem;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+  .bank-name strong {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
   @media (max-width: 700px) {
     #receipt-export { padding: 16px 12px; }
     .panel { padding: 16px; }
@@ -705,6 +853,125 @@
     .payment-card { min-height: 46px; padding: 7px 8px; }
     .payment-card-name { font-size: 0.62rem; }
     .payment-card-amount { font-size: clamp(0.72rem, 3.2vw, 0.88rem); }
+
+    /* Responsive Menu Items Table Layout */
+    .items-table {
+      display: block;
+      width: 100%;
+    }
+    .items-table thead {
+      display: none;
+    }
+    .items-table tbody {
+      display: block;
+      width: 100%;
+    }
+    .items-table tr.item-row-inputs {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "name name"
+        "qty price";
+      gap: 10px 8px;
+      padding: 14px 0 6px 0;
+      border-bottom: none;
+      align-items: start;
+    }
+    .items-table tr.item-row-shared {
+      display: block;
+      border-bottom: 1.5px dashed var(--border);
+      padding: 0 0 14px 0;
+    }
+    .items-table tr.item-row-shared td {
+      display: block;
+      width: 100%;
+      padding: 0 !important;
+    }
+    .items-table tr:has(.empty-state) {
+      display: block;
+      border-bottom: none;
+      padding: 16px 0;
+    }
+    .items-table tr.add-item-row {
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "name name"
+        "qty price";
+      border-bottom: none;
+      padding-bottom: 6px;
+    }
+    .items-table tr.add-item-shared-row {
+      display: block;
+      border-bottom: none;
+      padding: 0 0 12px 0;
+    }
+    .items-table tr.add-item-shared-row td {
+      display: block;
+      width: 100%;
+      padding: 0 !important;
+    }
+    .items-table tr.add-item-action-row {
+      display: block;
+      padding: 0 0 8px 0;
+      border-bottom: none;
+    }
+    .items-table td {
+      display: block;
+      padding: 0 !important;
+      border-bottom: none !important;
+      width: 100%;
+    }
+    .items-table td:nth-child(1) {
+      grid-area: name;
+    }
+    .items-table td:nth-child(2) {
+      grid-area: qty;
+      display: flex;
+      align-items: center;
+    }
+    .items-table td:nth-child(3) {
+      grid-area: price;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .items-table td:nth-child(4) {
+      position: absolute;
+      top: 14px;
+      right: 0;
+      width: auto;
+      height: auto;
+      display: block;
+    }
+    .items-table textarea.item-edit-name {
+      padding-right: 42px !important;
+    }
+    .items-table .item-price-input {
+      width: 100%;
+      min-width: 0;
+    }
+    .items-table .qty-stepper {
+      width: 100%;
+      grid-template-columns: 32px 1fr 32px;
+      max-width: 130px;
+    }
+    .items-table .qty-stepper input.item-edit-number {
+      width: 100%;
+      text-align: center;
+    }
+    .item-shared-edit .cb-item label {
+      padding: 5px 9px;
+      font-size: 0.72rem;
+    }
+    .item-shared-edit .cb-item label .cb-box {
+      width: 13px;
+      height: 13px;
+      font-size: 9px;
+    }
   }
 
   @media print { .actions-bar { display: none; } }
@@ -767,7 +1034,45 @@
       <div class="panel-title">Payment Details</div>
       <div class="row">
         <label>Bank / App</label>
-        <input type="text" id="pay-bank" placeholder="e.g. PromptPay / KBank" oninput="updateReceipt()">
+        <input type="hidden" id="pay-bank" value="PromptPay">
+        <div class="bank-select" id="bank-select">
+          <button class="bank-select-button" id="bank-select-button" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleBankMenu()">
+            <img class="bank-logo-img" id="selected-bank-logo" src="assets/banks/promptpay.png" alt="" loading="lazy">
+            <span class="bank-logo-fallback" id="selected-bank-fallback" style="display:none;">...</span>
+            <span class="bank-name"><strong id="selected-bank-code">PromptPay</strong><span id="selected-bank-name"></span></span>
+            <span class="bank-caret">▼</span>
+          </button>
+          <div class="bank-menu" id="bank-options" role="listbox" aria-label="Bank or payment app">
+            <button class="bank-option active" type="button" role="option" aria-selected="true" data-bank="PromptPay" data-code="PromptPay" data-name="" data-logo="assets/banks/promptpay.png" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/promptpay.png" alt="" loading="lazy"><span class="bank-name"><strong>PromptPay</strong></span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="KBank" data-code="KBank" data-name="Kasikorn" data-logo="assets/banks/kbank.svg" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/kbank.svg" alt="" loading="lazy"><span class="bank-name"><strong>KBank</strong>Kasikorn</span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="SCB" data-code="SCB" data-name="Siam Commercial" data-logo="assets/banks/scb.svg" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/scb.svg" alt="" loading="lazy"><span class="bank-name"><strong>SCB</strong>Siam Commercial</span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="Bangkok Bank" data-code="BBL" data-name="Bangkok Bank" data-logo="assets/banks/bbl.svg" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/bbl.svg" alt="" loading="lazy"><span class="bank-name"><strong>BBL</strong>Bangkok Bank</span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="KTB" data-code="KTB" data-name="Krungthai" data-logo="assets/banks/ktb.svg" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/ktb.svg" alt="" loading="lazy"><span class="bank-name"><strong>KTB</strong>Krungthai</span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="TTB" data-code="TTB" data-name="TMBThanachart" data-logo="assets/banks/ttb.svg" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/ttb.svg" alt="" loading="lazy"><span class="bank-name"><strong>TTB</strong>TMBThanachart</span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="Krungsri" data-code="BAY" data-name="Krungsri" data-logo="assets/banks/bay.svg" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/bay.svg" alt="" loading="lazy"><span class="bank-name"><strong>BAY</strong>Krungsri</span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="GSB" data-code="GSB" data-name="Government Savings" data-logo="assets/banks/gsb.svg" onclick="selectBank(this)">
+              <img class="bank-logo-img" src="assets/banks/gsb.svg" alt="" loading="lazy"><span class="bank-name"><strong>GSB</strong>Government Savings</span>
+            </button>
+            <button class="bank-option" type="button" role="option" aria-selected="false" data-bank="other" data-code="Other" data-name="Custom" data-logo="" onclick="selectBank(this)">
+              <span class="bank-logo-fallback">...</span><span class="bank-name"><strong>Other</strong>Custom</span>
+            </button>
+          </div>
+        </div>
+        <input type="text" id="pay-bank-custom" placeholder="Enter bank/app name" style="display:none; margin-top: 8px;" oninput="updateReceipt()">
       </div>
       <div class="row">
         <label>Account / Number</label>
@@ -932,7 +1237,7 @@ function renderItemFriendsCheck() {
 // ---- Items ----
 function addItem() {
   const name = document.getElementById('item-name').value.trim();
-  const price = parseFloat(document.getElementById('item-price').value);
+  const price = parsePrice(document.getElementById('item-price').value);
   const qty = Math.min(999, Math.max(1, parseInt(document.getElementById('item-qty').value) || 1));
   if (!name || isNaN(price) || price <= 0) return;
 
@@ -975,7 +1280,7 @@ function updateItemField(id, field, value) {
     item.name = name;
   }
   if (field === 'price') {
-    const price = parseFloat(value);
+    const price = parsePrice(value);
     if (isNaN(price) || price <= 0) {
       renderItems();
       return;
@@ -1024,9 +1329,7 @@ function renderItems() {
   const tbody = document.getElementById('items-body');
   const addRows = `<tr class="add-item-row">
       <td>
-        <input class="item-edit-name" type="text" id="item-name" placeholder="Item name" onkeydown="if(event.key==='Enter')addItem()">
-        <div class="add-item-hint">Shared by (none selected = split all)</div>
-        <div class="item-shared-edit" id="item-friends-check"></div>
+        <textarea class="item-edit-name" id="item-name" placeholder="Item name" rows="2"></textarea>
       </td>
       <td>
         <div class="qty-stepper">
@@ -1035,8 +1338,14 @@ function renderItems() {
           <button class="stepper-btn" type="button" onclick="stepNewItemQty(1)" aria-label="Increase new item quantity">+</button>
         </div>
       </td>
-      <td style="text-align:right;"><input class="item-edit-number item-price-input" type="number" id="item-price" placeholder="0.00" min="0" step="0.01" aria-label="New item price" onkeydown="if(event.key==='Enter')addItem()"></td>
+      <td style="text-align:right;"><input class="item-edit-number item-price-input" type="text" inputmode="decimal" id="item-price" placeholder="0.00" oninput="sanitizePriceInput(this)" onkeydown="if(event.key==='Enter')addItem()" onblur="formatPriceInput(this)" onfocus="unformatPriceInput(this)"></td>
       <td></td>
+    </tr>
+    <tr class="add-item-shared-row">
+      <td colspan="4">
+        <div class="add-item-hint">Shared by (none selected = split all)</div>
+        <div class="item-shared-edit" id="item-friends-check"></div>
+      </td>
     </tr>
     <tr class="add-item-action-row">
       <td colspan="4"><button class="btn btn-primary" onclick="addItem()">+ Add Item</button></td>
@@ -1054,11 +1363,9 @@ function renderItems() {
           <label for="${id}"><span class="cb-box">✓</span>${esc(friend)}</label>
         </span>`;
       }).join('');
-    return `<tr>
+    return `<tr class="item-row-inputs">
       <td>
-        <input class="item-edit-name" type="text" value="${esc(item.name)}" aria-label="Edit ${esc(item.name)} name" onchange="updateItemField(${item.id}, 'name', this.value)" onkeydown="if(event.key==='Enter')this.blur()">
-        <div class="item-shared">Shared: ${esc(sharedLabel)}</div>
-        <div class="item-shared-edit">${sharedControls}</div>
+        <textarea class="item-edit-name" rows="2" aria-label="Edit ${esc(item.name)} name" onchange="updateItemField(${item.id}, 'name', this.value)">${esc(item.name)}</textarea>
       </td>
       <td>
         <div class="qty-stepper">
@@ -1067,8 +1374,20 @@ function renderItems() {
           <button class="stepper-btn" type="button" onclick="stepItemQty(${item.id}, 1)" aria-label="Increase ${esc(item.name)} quantity">+</button>
         </div>
       </td>
-      <td style="text-align:right;"><input class="item-edit-number item-price-input" type="number" min="0" step="0.01" value="${item.price}" aria-label="Edit ${esc(item.name)} price" onchange="updateItemField(${item.id}, 'price', this.value)"></td>
-      <td style="text-align:right;"><button class="btn btn-danger" onclick="removeItem(${item.id})">×</button></td>
+      <td style="text-align:right;"><input class="item-edit-number item-price-input" type="text" inputmode="decimal" value="${fmt(item.price)}" aria-label="Edit ${esc(item.name)} price" oninput="sanitizePriceInput(this)" onchange="updateItemField(${item.id}, 'price', this.value)" onblur="formatPriceInput(this)" onfocus="unformatPriceInput(this)"></td>
+      <td style="text-align:right;">
+        <button class="btn-trash" onclick="removeItem(${item.id})" aria-label="Delete ${esc(item.name)}">
+          <svg viewBox="0 0 14 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 14C1 14.5304 1.21071 15.0391 1.58579 15.4142C1.96086 15.7893 2.46957 16 3 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V4H1V14ZM4.5 6C4.77614 6 5 6.22386 5 6.5V13.5C5 13.7761 4.77614 14 4.5 14C4.22386 14 4 13.7761 4 13.5V6.5C4 6.22386 4.22386 6 4.5 6ZM7 6C7.27614 6 7.5 6.22386 7.5 6.5V13.5C7.5 13.7761 7.27614 14 7 14C6.72386 14 6.5 13.7761 6.5 13.5V6.5C6.5 6.22386 6.72386 6 7 6ZM9.5 6C9.77614 6 10 6.22386 10 6.5V13.5C10 13.7761 9.77614 14 9.5 14C9.22386 14 9 13.7761 9 13.5V6.5C9 6.22386 9.22386 6 9.5 6ZM10.5 1H8.5L8 0.5H6L5.5 1H3.5C3.22386 1 3 1.22386 3 1.5V3H11V1.5C11 1.22386 10.7761 1 10.5 1Z"/>
+          </svg>
+        </button>
+      </td>
+    </tr>
+    <tr class="item-row-shared">
+      <td colspan="4">
+        <div class="item-shared">Shared: ${esc(sharedLabel)}</div>
+        <div class="item-shared-edit">${sharedControls}</div>
+      </td>
     </tr>`;
   }).join('');
   tbody.innerHTML = itemRows + addRows;
@@ -1086,6 +1405,86 @@ function esc(value) {
     .replace(/'/g, '&#39;');
 }
 
+function sanitizePriceValue(value) {
+  const cleaned = String(value).replace(/,/g, '').replace(/[^\d.]/g, '');
+  const parts = cleaned.split('.');
+  return parts.length > 1 ? `${parts[0]}.${parts.slice(1).join('')}` : parts[0];
+}
+
+function sanitizePriceInput(input) {
+  const cleaned = sanitizePriceValue(input.value);
+  if (input.value !== cleaned) {
+    input.value = cleaned;
+  }
+}
+
+function parsePrice(val) {
+  const clean = sanitizePriceValue(val);
+  if (!/^\d+(\.\d+)?$/.test(clean)) return NaN;
+  return Number(clean);
+}
+
+function formatPriceInput(input) {
+  const num = parsePrice(input.value);
+  if (!isNaN(num) && num >= 0) {
+    input.value = fmt(num);
+  }
+}
+
+function unformatPriceInput(input) {
+  const num = parsePrice(input.value);
+  if (!isNaN(num)) {
+    input.value = num.toFixed(2);
+  }
+}
+
+function toggleBankMenu(open) {
+  const select = document.getElementById('bank-select');
+  const trigger = document.getElementById('bank-select-button');
+  const shouldOpen = typeof open === 'boolean' ? open : !select.classList.contains('open');
+  select.classList.toggle('open', shouldOpen);
+  trigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+}
+
+function selectBank(button) {
+  const value = button.dataset.bank;
+  const input = document.getElementById('pay-bank');
+  const selectedLogo = document.getElementById('selected-bank-logo');
+  const selectedFallback = document.getElementById('selected-bank-fallback');
+  const selectedCode = document.getElementById('selected-bank-code');
+  const selectedName = document.getElementById('selected-bank-name');
+  input.value = value;
+  document.querySelectorAll('#bank-options .bank-option').forEach(option => {
+    const isActive = option === button;
+    option.classList.toggle('active', isActive);
+    option.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  selectedCode.textContent = button.dataset.code;
+  selectedName.textContent = button.dataset.name;
+  if (button.dataset.logo) {
+    selectedLogo.src = button.dataset.logo;
+    selectedLogo.style.display = 'block';
+    selectedFallback.style.display = 'none';
+  } else {
+    selectedLogo.style.display = 'none';
+    selectedFallback.style.display = 'inline-flex';
+  }
+  toggleBankMenu(false);
+  toggleCustomBank(value);
+  updateReceipt();
+}
+
+function toggleCustomBank(value) {
+  const customInput = document.getElementById('pay-bank-custom');
+  if (value === 'other') {
+    customInput.style.display = 'block';
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    customInput.value = '';
+  }
+}
+
 function updateReceipt() {
   const vatPct = parseFloat(document.getElementById('vat').value) || 0;
   const svcPct = parseFloat(document.getElementById('service').value) || 0;
@@ -1096,7 +1495,8 @@ function updateReceipt() {
     const d = new Date(rawDate + 'T00:00:00');
     date = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   }
-  const bank = document.getElementById('pay-bank').value;
+  const bankSelect = document.getElementById('pay-bank').value;
+  const bank = bankSelect === 'other' ? document.getElementById('pay-bank-custom').value.trim() : bankSelect;
   const account = document.getElementById('pay-account').value;
   const payName = document.getElementById('pay-name').value;
 
@@ -1252,6 +1652,19 @@ function exportCSV() {
   link.href = URL.createObjectURL(blob);
   link.click();
 }
+
+document.addEventListener('click', (event) => {
+  const select = document.getElementById('bank-select');
+  if (select && !select.contains(event.target)) {
+    toggleBankMenu(false);
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    toggleBankMenu(false);
+  }
+});
 
 // Init
 const today = new Date().toISOString().split('T')[0];

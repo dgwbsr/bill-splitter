@@ -8,15 +8,18 @@ This repo is a static single-page restaurant bill splitter. The whole app lives 
 - `package.json` only provides a local static server with `npm run dev`.
 - `README.md` explains usage, deployment, and current user-facing behavior.
 - Export image depends on the CDN-loaded `html2canvas` script.
+- Current app version is `v1.0.2`.
 
 ## Core Behaviors
 
 - Friends are stored in the global `friends` array.
 - Menu items are stored in the global `items` array.
+- Item names can contain line breaks and should remain readable in the input table and receipt.
+- Item price fields sanitize to numeric decimal input before parsing.
 - If no people are selected for an item, that item is split by everyone.
 - VAT and service charge are applied per person from their item subtotal.
 - VAT is calculated on `subtotal + service`.
-- Payment details are optional and only shown when at least one payment field has a value.
+- Payment details are optional and only shown when at least one payment field has a value. Bank/app selection uses a compact custom dropdown with local logo image assets and abbreviations such as `SCB` shown before the full name to reduce selection mistakes.
 
 ## Receipt Output
 
@@ -31,6 +34,7 @@ When an item is shared by every current friend, the itemized receipt should show
 
 - Keep the receipt compact and readable on mobile.
 - Numeric amounts should use tabular, easy-to-read number styling.
+- Keep `.item-shared` left-aligned even when table action cells are right-aligned.
 - Payment cards must handle long names and large amounts without overflowing.
 - Itemized bill rows use inline shared-by text and light row guides for scanning. Avoid adding duplicate dotted/dashed lines.
 - Keep receipt section dividers separated from row guide lines. Item rows are wrapped in `.thermal-items`, charges are in `.thermal-breakdown.thermal-section`, and the grand total is in `.thermal-total-section.thermal-section` so only one visual line appears between sections.

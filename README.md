@@ -2,12 +2,15 @@
 
 A single-page bill splitting app for restaurant meals. Add friends, menu items, VAT, service charge, and payment details, then export the result as an image, CSV, or print-ready receipt.
 
+Current version: `v1.0.2`
+
 ## Features
 
-- Add friends and menu items with quantity and price.
+- Add friends and menu items with quantity and numeric-only price entry.
+- Enter long or multi-line item names without losing readability.
 - Select who shared each item. If no one is selected, the item is split by everyone.
 - Apply VAT and service charge to each person's subtotal.
-- Add payment destination details for sharing.
+- Choose payment destination details with a compact bank/app logo dropdown for easier selection.
 - Export the split as a PNG image, CSV, or printout.
 
 ## Receipt Output
@@ -24,8 +27,8 @@ The itemized receipt is intended for checking the bill. The payment cards are in
 1. Enter the restaurant name and date.
 2. Add everyone in the **Friends** section.
 3. Set VAT and service charge percentages.
-4. Add payment details if you want them shown in the share output.
-5. Add each menu item, selecting the people who shared it. Leave all checkboxes empty to split that item by everyone.
+4. Add payment details if you want them shown in the share output. Use the bank/app logo dropdown to avoid choosing the wrong bank.
+5. Add each menu item, selecting the people who shared it. Item names can wrap to new lines, and price fields accept numbers only. Leave all checkboxes empty to split that item by everyone.
 6. Use **Export as Image**, **Export CSV**, or **Print** from the receipt panel.
 
 ## Project Structure
